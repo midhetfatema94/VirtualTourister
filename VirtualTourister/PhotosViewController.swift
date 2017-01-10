@@ -36,6 +36,17 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let coordinate = CLLocationCoordinate2D(latitude: pinObject[0].latitude, longitude: pinObject[0].longitude)
+        let latDelta:CLLocationDegrees = 5.0
+        let lonDelta:CLLocationDegrees = 5.0
+        let span = MKCoordinateSpanMake(latDelta, lonDelta)
+        let region = MKCoordinateRegionMake(coordinate, span)
+        map.setRegion(region, animated: false)
+        
+        let newAnnotation = MKPointAnnotation()
+        newAnnotation.coordinate = coordinate
+        map.addAnnotation(newAnnotation)
+        
         checkLocalOrServer()
     }
 
