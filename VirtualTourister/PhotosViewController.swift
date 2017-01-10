@@ -23,18 +23,8 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if checkForPhotos().count > 0 {
-            print("local photos available")
-            localPhotos = checkForPhotos()
-            isLocalPhotos = true
-            photosFlickr.reloadData()
-        }
-        else {
-            print("local photos not available")
-            getFlickrPhotos(pgNo: pageNumber)
-            isLocalPhotos = false
-        }
+        
+        checkLocalOrServer()
     }
 
     func checkForPhotos() -> [Photo] {
@@ -46,6 +36,21 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         let photos = try! helper.context.fetch(fr) as! [Photo]
         print("check for photo:", photos)
         return photos
+    }
+    
+    func checkLocalOrServer() {
+        
+        if checkForPhotos().count > 0 {
+            print("local photos available")
+            localPhotos = checkForPhotos()
+            isLocalPhotos = true
+            photosFlickr.reloadData()
+        }
+        else {
+            print("local photos not available")
+            getFlickrPhotos(pgNo: pageNumber)
+            isLocalPhotos = false
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -68,6 +73,18 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         }
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if isLocalPhotos {
+            
+            let photoObject = localPhotos[indexPath.item]
+            helper.context.delete(photoObject)
+            print("deleted object")
+            checkLocalOrServer()
+        }
+        
     }
     
     func getFlickrPhotos(pgNo: Int) {
@@ -125,7 +142,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
             
             do {
                 try helper.stack.saveContext()
-                self.photosFlickr.reloadData()
+                self.checkLocalOrServer()
                 print("saved photos")
             } catch {
                 print("Error while saving.")
