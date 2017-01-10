@@ -67,6 +67,7 @@
 		BB4721441E24BCB3002AF7D7 /* CoreDataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		BB4721461E24CB11002AF7D7 /* Navigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		BB4721481E24CD35002AF7D7 /* PhotosCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewCell.swift; sourceTree = "<group>"; };
+		BB47214A1E2555B0002AF7D7 /* Model2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model2.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -577,6 +578,7 @@
 		BB47212D1E24B159002AF7D7 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				BB47214A1E2555B0002AF7D7 /* Model2.xcdatamodel */,
 				BB47212E1E24B159002AF7D7 /* Model.xcdatamodel */,
 			);
 			currentVersion = BB47212E1E24B159002AF7D7 /* Model.xcdatamodel */;

@@ -121,6 +121,18 @@
                                     <outlet property="delegate" destination="b0g-nZ-1wK" id="OZy-qa-Z9e"/>
                                 </connections>
                             </mapView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y7a-3S-a6S">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="9M3-4I-ho9"/>
+                                    <barButtonItem title="New Collection" id="38r-xa-OBV">
+                                        <connections>
+                                            <action selector="getNewCollection:" destination="b0g-nZ-1wK" id="Cr7-pG-Yme"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="mA8-Rr-QCU"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -129,12 +141,16 @@
                             <constraint firstItem="ZmC-pO-gWa" firstAttribute="top" secondItem="Iqk-rw-WQh" secondAttribute="bottom" id="Gcg-z4-CBl"/>
                             <constraint firstItem="cN7-lk-aSj" firstAttribute="leading" secondItem="ie7-vd-opu" secondAttribute="leading" id="M4v-vN-3xw"/>
                             <constraint firstItem="cN7-lk-aSj" firstAttribute="top" secondItem="aKb-Vi-z1z" secondAttribute="bottom" id="Qio-eL-JcJ"/>
+                            <constraint firstItem="y7a-3S-a6S" firstAttribute="leading" secondItem="ie7-vd-opu" secondAttribute="leading" id="V5P-fh-kTE"/>
+                            <constraint firstItem="ZmC-pO-gWa" firstAttribute="top" secondItem="y7a-3S-a6S" secondAttribute="bottom" id="VuY-TX-xgX"/>
                             <constraint firstAttribute="trailing" secondItem="Iqk-rw-WQh" secondAttribute="trailing" id="cwU-nE-y4X"/>
                             <constraint firstItem="Iqk-rw-WQh" firstAttribute="top" secondItem="cN7-lk-aSj" secondAttribute="bottom" id="dga-u9-8Qh"/>
+                            <constraint firstAttribute="trailing" secondItem="y7a-3S-a6S" secondAttribute="trailing" id="fmb-he-eHl"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="map" destination="cN7-lk-aSj" id="5TB-gH-Xzg"/>
+                        <outlet property="newCollection" destination="38r-xa-OBV" id="Bdc-Wr-6QA"/>
                         <outlet property="photosFlickr" destination="Iqk-rw-WQh" id="slU-br-bEV"/>
                     </connections>
                 </viewController>

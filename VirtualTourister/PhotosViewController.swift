@@ -20,7 +20,19 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     @IBOutlet weak var photosFlickr: UICollectionView!
     @IBOutlet weak var map: MKMapView!
+    @IBOutlet weak var newCollection: UIBarButtonItem!
     
+    @IBAction func getNewCollection(_ sender: Any) {
+        
+        for eachLocalPhoto in localPhotos {
+            
+            helper.context.delete(eachLocalPhoto)
+        }
+        print("deleted previous photos")
+        pageNumber += 1
+        isLocalPhotos = false
+        getFlickrPhotos(pgNo: pageNumber)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,16 +52,19 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func checkLocalOrServer() {
         
-        if checkForPhotos().count > 0 {
-            print("local photos available")
-            localPhotos = checkForPhotos()
-            isLocalPhotos = true
-            photosFlickr.reloadData()
-        }
-        else {
-            print("local photos not available")
-            getFlickrPhotos(pgNo: pageNumber)
-            isLocalPhotos = false
+        DispatchQueue.main.async {
+            
+            if self.checkForPhotos().count > 0 {
+                print("local photos available")
+                self.localPhotos = self.checkForPhotos()
+                self.isLocalPhotos = true
+                self.photosFlickr.reloadData()
+            }
+            else {
+                print("local photos not available")
+                self.getFlickrPhotos(pgNo: self.pageNumber)
+                self.isLocalPhotos = false
+            }
         }
     }
     
@@ -79,12 +94,14 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         if isLocalPhotos {
             
-            let photoObject = localPhotos[indexPath.item]
-            helper.context.delete(photoObject)
-            print("deleted object")
-            checkLocalOrServer()
+            DispatchQueue.main.async {
+                
+                let photoObject = self.localPhotos[indexPath.item]
+                helper.context.delete(photoObject)
+                print("deleted object")
+                self.checkLocalOrServer()
+            }
         }
-        
     }
     
     func getFlickrPhotos(pgNo: Int) {
@@ -113,6 +130,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
                         
                     }
                     else {
+                        self.newCollection.isEnabled = false
                         self.photosFlickr.reloadData()
                         self.savePhotos()
                     }
@@ -144,6 +162,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
                 try helper.stack.saveContext()
                 self.checkLocalOrServer()
                 print("saved photos")
+                self.newCollection.isEnabled = true
             } catch {
                 print("Error while saving.")
             }
