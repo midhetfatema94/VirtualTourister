@@ -16,7 +16,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     var localPhotos: [Photo] = []
     var flickrPhotos: [[String: Any]] = []
     var isLocalPhotos = false
-    
+    var pageNumber = 1
     
     @IBOutlet weak var photosFlickr: UICollectionView!
     @IBOutlet weak var map: MKMapView!
@@ -32,7 +32,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         }
         else {
             print("local photos not available")
-            getFlickrPhotos(pgNo: 1)
+            getFlickrPhotos(pgNo: pageNumber)
             isLocalPhotos = false
         }
     }
@@ -64,7 +64,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
             cell.photo.image = UIImage(data: localPhotos[indexPath.item].data!)
         }
         else {
-            cell.photo.image = try! UIImage(data: Data(contentsOf: URL(string: makePhotoUrl(eachPhoto: flickrPhotos[indexPath.item]))!))
+            cell.photo.imageFromServerURL(urlString: makePhotoUrl(eachPhoto: flickrPhotos[indexPath.item]))
         }
         
         return cell
@@ -81,8 +81,24 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
                     print("response arrived!")
                     let photoSet = response["photos"] as! [String: Any]
                     self.flickrPhotos = photoSet["photo"] as! [[String: Any]]
-                    self.photosFlickr.reloadData()
-                    self.savePhotos()
+                    print("count is:", self.flickrPhotos.count)
+                    if self.flickrPhotos.count == 0 {
+                        let alert = UIAlertController(title: "No photos found!", message: nil, preferredStyle: .alert)
+                        
+                        let saveAction = UIAlertAction(title: "Okay", style: .default, handler: { (action: UIAlertAction) -> Void in
+                            
+                            self.navigationController!.popViewController(animated: true)
+                        })
+                        
+                        alert.addAction(saveAction)
+                        
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    }
+                    else {
+                        self.photosFlickr.reloadData()
+                        self.savePhotos()
+                    }
                 }
                 else {
                     print("response error")
@@ -93,30 +109,50 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func savePhotos() {
         
-        for photo in flickrPhotos {
+        DispatchQueue.init(label: "newQueue").async {
             
-            let url = makePhotoUrl(eachPhoto: photo)
-            let data = try! Data(contentsOf: URL(string: url)!)
-            let newPhoto = NSEntityDescription.insertNewObject(forEntityName: "Photo", into: helper.context) as! Photo
-            newPhoto.data = data
-            newPhoto.url = url
-            newPhoto.creationDate = Date()
-            newPhoto.pin = pinObject[0]
-            print(newPhoto)
+            for photo in self.flickrPhotos {
+                
+                let url = self.makePhotoUrl(eachPhoto: photo)
+                let data = try! Data(contentsOf: URL(string: url)!)
+                let newPhoto = NSEntityDescription.insertNewObject(forEntityName: "Photo", into: helper.context) as! Photo
+                newPhoto.data = data
+                newPhoto.url = url
+                newPhoto.creationDate = Date()
+                newPhoto.pin = self.pinObject[0]
+                print(newPhoto)
+            }
+            
+            do {
+                try helper.stack.saveContext()
+                self.photosFlickr.reloadData()
+                print("saved photos")
+            } catch {
+                print("Error while saving.")
+            }
         }
-        
-        do {
-            try helper.stack.saveContext()
-            print("saved photos")
-        } catch {
-            print("Error while saving.")
-        }
-        
     }
     
     func makePhotoUrl(eachPhoto: [String: Any]) -> String {
         
         let photoURL = "https://farm\(eachPhoto["farm"]!).staticflickr.com/\(eachPhoto["server"]!)/\(eachPhoto["id"]!)_\(eachPhoto["secret"]!).jpg"
         return photoURL
+    }
+}
+
+extension UIImageView {
+    public func imageFromServerURL(urlString: String) {
+        
+        URLSession.shared.dataTask(with: NSURL(string: urlString)! as URL, completionHandler: { (data, response, error) -> Void in
+            
+            if error != nil {
+                print(error as Any)
+                return
+            }
+            DispatchQueue.main.async(execute: {
+                let image = UIImage(data: data!)
+                self.image = image
+            })
+        }).resume()
     }
 }
