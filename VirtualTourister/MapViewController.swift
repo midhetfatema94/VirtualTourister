@@ -35,6 +35,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             let region = MKCoordinateRegionMake(coordinate, span)
             map.setRegion(region, animated: false)
         }
+        
+        fetchAllPins()
     }
 
     func addPin(sender: UILongPressGestureRecognizer) {
@@ -87,6 +89,29 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
         return false
+    }
+    
+    func fetchAllPins() {
+        
+        let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "LocationPin")
+        
+        let pins = try! helper.context.fetch(fr) as! [LocationPin]
+        print("all pins:", pins)
+        
+        if pins.count > 0 {
+            
+            for pin in pins {
+                
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
+                if !annotations.contains(annotation) {
+                    annotations.append(annotation)
+                }
+            }
+            
+            map.addAnnotations(annotations)
+        }
+        
     }
     
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
