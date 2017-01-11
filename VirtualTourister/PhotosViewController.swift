@@ -21,9 +21,11 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     @IBOutlet weak var photosFlickr: UICollectionView!
     @IBOutlet weak var map: MKMapView!
     @IBOutlet weak var newCollection: UIBarButtonItem!
+    @IBOutlet weak var loadingView: UIView!
     
     @IBAction func getNewCollection(_ sender: Any) {
         
+        loadingView.isHidden = false
         for eachLocalPhoto in localPhotos {
             
             helper.context.delete(eachLocalPhoto)
@@ -35,6 +37,8 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationController!.isNavigationBarHidden = false
         
         let coordinate = CLLocationCoordinate2D(latitude: pinObject[0].latitude, longitude: pinObject[0].longitude)
         let latDelta:CLLocationDegrees = 5.0
@@ -127,6 +131,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
                     let photoSet = response["photos"] as! [String: Any]
                     self.flickrPhotos = photoSet["photo"] as! [[String: Any]]
                     print("count is:", self.flickrPhotos.count)
+                    self.loadingView.isHidden = true
                     if self.flickrPhotos.count == 0 {
                         let alert = UIAlertController(title: "No photos found!", message: nil, preferredStyle: .alert)
                         

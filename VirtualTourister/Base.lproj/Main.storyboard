@@ -91,7 +91,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placholderImage" translatesAutoresizingMaskIntoConstraints="NO" id="CUb-Aw-x7C">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unknown" translatesAutoresizingMaskIntoConstraints="NO" id="CUb-Aw-x7C">
                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                 </imageView>
                                             </subviews>
@@ -112,7 +112,21 @@
                                     <outlet property="delegate" destination="b0g-nZ-1wK" id="GnJ-uO-gmU"/>
                                 </connections>
                             </collectionView>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="cN7-lk-aSj">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hs5-aB-MKr">
+                                <rect key="frame" x="0.0" y="239" width="375" height="384"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="ET5-Ou-xju">
+                                        <rect key="frame" x="169" y="174" width="37" height="37"/>
+                                        <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="0.55000000000000004" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="ET5-Ou-xju" firstAttribute="centerX" secondItem="hs5-aB-MKr" secondAttribute="centerX" id="fA0-k9-G2s"/>
+                                    <constraint firstItem="ET5-Ou-xju" firstAttribute="centerY" secondItem="hs5-aB-MKr" secondAttribute="centerY" id="n48-Bi-kQd"/>
+                                </constraints>
+                            </view>
+                            <mapView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" mapType="standard" showsBuildings="NO" showsCompass="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cN7-lk-aSj">
                                 <rect key="frame" x="0.0" y="64" width="375" height="175"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="175" id="eSQ-DM-ys5"/>
@@ -136,12 +150,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="hs5-aB-MKr" firstAttribute="top" secondItem="cN7-lk-aSj" secondAttribute="bottom" id="4O1-wY-J9C"/>
                             <constraint firstItem="Iqk-rw-WQh" firstAttribute="leading" secondItem="ie7-vd-opu" secondAttribute="leading" id="Adm-Ez-DKi"/>
                             <constraint firstAttribute="trailing" secondItem="cN7-lk-aSj" secondAttribute="trailing" id="FPA-6T-x7b"/>
+                            <constraint firstAttribute="trailing" secondItem="hs5-aB-MKr" secondAttribute="trailing" id="GcX-ek-RyQ"/>
                             <constraint firstItem="cN7-lk-aSj" firstAttribute="leading" secondItem="ie7-vd-opu" secondAttribute="leading" id="M4v-vN-3xw"/>
                             <constraint firstItem="cN7-lk-aSj" firstAttribute="top" secondItem="aKb-Vi-z1z" secondAttribute="bottom" id="Qio-eL-JcJ"/>
                             <constraint firstItem="y7a-3S-a6S" firstAttribute="leading" secondItem="ie7-vd-opu" secondAttribute="leading" id="V5P-fh-kTE"/>
+                            <constraint firstItem="y7a-3S-a6S" firstAttribute="top" secondItem="hs5-aB-MKr" secondAttribute="bottom" id="Vnv-2a-UFW"/>
                             <constraint firstItem="ZmC-pO-gWa" firstAttribute="top" secondItem="y7a-3S-a6S" secondAttribute="bottom" id="VuY-TX-xgX"/>
+                            <constraint firstItem="hs5-aB-MKr" firstAttribute="leading" secondItem="ie7-vd-opu" secondAttribute="leading" id="ZfS-vR-knn"/>
                             <constraint firstAttribute="trailing" secondItem="Iqk-rw-WQh" secondAttribute="trailing" id="cwU-nE-y4X"/>
                             <constraint firstItem="Iqk-rw-WQh" firstAttribute="top" secondItem="cN7-lk-aSj" secondAttribute="bottom" constant="-60" id="dga-u9-8Qh"/>
                             <constraint firstAttribute="trailing" secondItem="y7a-3S-a6S" secondAttribute="trailing" id="fmb-he-eHl"/>
@@ -149,6 +167,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="loadingView" destination="hs5-aB-MKr" id="moQ-B6-QB7"/>
                         <outlet property="map" destination="cN7-lk-aSj" id="5TB-gH-Xzg"/>
                         <outlet property="newCollection" destination="38r-xa-OBV" id="Bdc-Wr-6QA"/>
                         <outlet property="photosFlickr" destination="Iqk-rw-WQh" id="slU-br-bEV"/>
@@ -160,6 +179,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="placholderImage" width="564" height="550"/>
+        <image name="unknown" width="225" height="225"/>
     </resources>
 </document>
